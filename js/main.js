@@ -37,9 +37,59 @@ Player.prototype.run = function() {
 	}, 100);		
 }
 Player.prototype.shouldJump = function() {
-	return Math.random() > 0.5;
+	//return false
+	//return true
+	//return Math.random() > 0.5;
+	var nearestObjectDistance = getNearestObjectDistance();
+	console.log(nearestObjectDistance);
+	return nearestObjectDistance > 0 && nearestObjectDistance < 80;
+}
+
+function getNearestObjectDistance(){
+	var nearestObjectDistance = 0;
+
+	var playground = document.getElementsByTagName('canvas')[0];
+	var playgroundWidth = playground.width;
+	var playgroundHeight = playground.height;
+	var context = playground.getContext("2d");
+	var imageData = context.getImageData(0,0,playgroundWidth,playgroundHeight);
+	var data = imageData.data;
+
+	var startHorizontal = 70;
+	var startVertial = 118;
+	var currentIndex;
+	var color;
+	for (var i = startHorizontal; i < playgroundWidth; i++) {
+		currentIndex = (startVertial*playgroundWidth*4) + i*4;
+		color = data[currentIndex];
+		if (color > 50) {
+			nearestObjectDistance = i - startHorizontal;
+			break;
+		}
+	}
+	return nearestObjectDistance;
 }
 
 
 var player = new Player();
 player.run();
+
+
+var playground = document.getElementsByTagName('canvas')[0];
+var playgroundWidth = playground.width;
+var playgroundHeight = playground.height;
+var context = playground.getContext("2d");
+var imageData = context.getImageData(0,0,playgroundWidth,playgroundHeight);
+var data = imageData.data;
+
+//cloud color 218
+//player and tree outer layer color 247
+//player and tree inner layer color 83
+//score color 82
+
+//scan start point 75 px from right side
+//scan start point 25 px from bottom side
+
+//canvas height 150 px
+//canvas width 600 px
+
